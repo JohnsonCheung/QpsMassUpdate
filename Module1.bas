@@ -39,7 +39,8 @@ For J = 0 To UB(FnAy)
     End If
 Next
 
-If Not Pth_IsExist(SrcPth & ".git") Then
+If Not Pth_IsExist(SrcPth & ".git\") Then
+    Stop
     Shell "git init"
 End If
 
