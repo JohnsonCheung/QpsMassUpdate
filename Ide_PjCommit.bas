@@ -13,13 +13,17 @@ Sub Pj_BrwSrcFdr(Pj As VBProject)
 Pth_Opn Pj_SrcPth(Pj)
 End Sub
 
+
 Sub Pj_Commit(Pj As VBProject, Optional Msg$ = "Commit")
 Dim Cmp As VBComponent
+Dim PjExt$
 Dim CmpAy() As VBComponent
 Dim FnAy$()
 Dim SrcPth$
 Dim BatFn$, BatAy$()
+Dim ToFfn$
 Dim J%
+
 For Each Cmp In Pj.VBComponents
     If CmpTy_IsWithMd(Cmp.Type) Then
         Push CmpAy, Cmp
@@ -32,6 +36,10 @@ If Pth_IsExist(SrcPth) Then
 Else
     Pth_CrtEachSeg SrcPth
 End If
+
+ToFfn = Ffn_ReplPth(Pj.Filename, SrcPth) '<--
+Fso.CopyFile Pj.Filename, ToFfn, OverwriteFiles:=True  '<===
+
 ChDir SrcPth    '<=== ChDir
 For J = 0 To UB(FnAy)
     If CmpAy(J).CodeModule.CountOfLines > 1 Then

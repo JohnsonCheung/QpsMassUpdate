@@ -32,6 +32,10 @@ End With
 Ffn_FInfo = O
 End Function
 
+Function Ffn_ReplPth$(Ffn$, Pth$)
+Ffn_ReplPth = Pth & Ffn_Fn(Ffn)
+End Function
+
 Function Ffn_Fn$(Ffn)
 Ffn_Fn = Dft(TakAftLastX(Ffn, "\"), Ffn)
 End Function
@@ -53,7 +57,7 @@ If ChrBeg(NewExt) <> "." Then Err.Raise 1
 Ffn_ReplExt = CutExt(Ffn) & NewExt
 End Function
 
-Function Ffn_ReplPth$(Ffn, RelativePth$)
+Function Ffn_ReplRelativePth$(Ffn, RelativePth$)
 If ChrEnd(RelativePth) <> "\" Then Err.Raise 1
-Ffn_ReplPth = Ffn_Pth(Ffn) & RelativePth & Ffn_Fn(Ffn)
+Ffn_ReplRelativePth = Ffn_Pth(Ffn) & RelativePth & Ffn_Fn(Ffn)
 End Function

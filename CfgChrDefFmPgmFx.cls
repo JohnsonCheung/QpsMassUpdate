@@ -32,6 +32,10 @@ Property Get ChrCdDotNmAy() As String()
 ChrCdDotNmAy = A_ChrCdDotNmAy
 End Property
 
+Function ChrCd_HasChoices(ChrCd$) As Boolean
+ChrCd_HasChoices = A_Dic_OfChrCd_ToChrDefIdx.Exists(ChrCd)
+End Function
+
 Function ChrCd_ChrDef(ChrCd$) As ChrDef
 'Const Pfx = "ZBRACELET_FAB"
 'If IsPfx(ChrCd, Pfx) Then Stop
@@ -120,7 +124,9 @@ For J = 0 To U
         .CharName = Dr(CnoChrNm)
         .CostEle = Dr(CnoCstEle)
         .CostGp = Dr(CnoCstGp)
-        Set .Dic_OfValNm_ToValCd = Dic(.CharCode)   'Dic = ZDic_OfChrCd_ToDicOfValNmToValCd
+        If Dic.Exists(.CharCode) Then
+            Set .Dic_OfValNm_ToValCd = Dic(.CharCode)   'Dic = ZDic_OfChrCd_ToDicOfValNmToValCd
+        End If
         .IsMulti = Dr(CnoIsMulti)
         .IsMust = Dr(CnoIsMust)
     End With
@@ -176,10 +182,10 @@ Private Function ZPgmFx_Ws_ChrV() As Worksheet
 Set ZPgmFx_Ws_ChrV = yWbMassUpd.Sheets("ChrV")
 End Function
 
-Private Property Get ZPgmFx_Ws_Ctl() As Worksheet
+Private Function ZPgmFx_Ws_Ctl() As Worksheet
 Set ZPgmFx_Ws_Ctl = yWbMassUpd.Sheets("Ctl")
-End Property
+End Function
 
-Private Property Get ZPgmFx_Ws_VdtChrCd() As Worksheet
+Private Function ZPgmFx_Ws_VdtChrCd() As Worksheet
 Set ZPgmFx_Ws_VdtChrCd = yWbMassUpd.Sheets("VdtChrCd")
-End Property
+End Function

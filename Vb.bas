@@ -330,7 +330,7 @@ Else
 End If
 End Function
 
-Function ReplPth$(Ffn, RelativePth$)
+Function ReplPth$(Ffn$, RelativePth$)
 ReplPth = Ffn_ReplPth(Ffn, RelativePth)
 End Function
 

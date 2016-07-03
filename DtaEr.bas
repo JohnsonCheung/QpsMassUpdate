@@ -307,8 +307,10 @@ For WsI = 2 To 2
             ChrCno = .Cno
         End With
     
+        If Not ChrDefInf.ChrCd_HasChoices(ChrCd) Then GoTo ChrNxt
+        
         ChrDef = ChrDefInf.ChrCd_ChrDef(ChrCd)
-    
+        
         ChrIsNeedInList = ChrDef.IsNeedInList
             
         If Not ChrIsNeedInList Then GoTo ChrNxt
@@ -698,9 +700,10 @@ For WsI = 2 To 2
             Cno = .Cno
         End With
 
+        If Not ChrDefInf.ChrCd_HasChoices(ChrCd) Then GoTo Nxt_Col
+        
         ChrDef = ChrDefInf.ChrCd_ChrDef(ChrCd)
             
-        If Not ChrDef.IsNeedInList Then GoTo Nxt_Col
         If Not ChrDef.IsMust Then GoTo Nxt_Col
     
         For R = 1 To UBound(WsSqv, 1)
