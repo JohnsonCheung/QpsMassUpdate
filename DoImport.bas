@@ -6,6 +6,7 @@ Private MassUpd_Wb As Workbook
 Private DtaChg() As TDtaChg
 
 Sub Do_Import()
+Dim Fx$
 Set MassUpd_Wb = Src_Wb
 Fct.AlignTwoWb MassUpd_Wb
 ZAssert_NoEr
@@ -21,8 +22,9 @@ For R = 0 To UBound(DtaChg)
 Next
 ZDoDlt_ZerCstRec_In_ProjOneTimeCost_and_SkuCostEle
 Db.Close
+Fx = MassUpd_Wb.FullName
 MassUpd_Wb.Close False
-ZDoMov_MassUpdFx
+ZDoMov_MassUpdFx Fx
 ZDoShellFb_ToGenCmpRpt
 End Sub
 
@@ -61,23 +63,19 @@ Db.Execute "Delete from ProjOneTimeCost where Cost=0" ' Delete any Cost=0 after 
 Db.Execute "Delete from SkuCostEle where Cost=0"
 End Sub
 
-Private Sub ZDoMov_MassUpdFx()
-Dim FmFx$, ToFdr$
-    FmFx = MassUpd_Wb.FullName
-    ToFdr = Fs_ImpDoneFdr & "NewQuote " & Format(NewQDte, "yyyy-mm-dd") & "\"
-    Pth_CrtIfNotExist ToFdr
-    
-Fso.MoveFile FmFx, ToFdr    '<===
-
-Dim Fn$, D$
-    Fn = Ffn_Fn(FmFx)
-    D = Format(NewQDte, "yyyy-mm-dd")
-
-Dim FxFn$
+Private Sub ZDoMov_MassUpdFx(FmFx$)
+Dim ToFdr$
+Dim Fn$
 Dim Fdr$
 Dim SubFdr$
 
-Msg "{Mass-Update-Xls-File} in {Fdr} is imported into database and moved to {Sub-Fdr}", FxFn, Fdr, SubFdr
+SubFdr = "NewQuote " & Format(NewQDte, "yyyy-mm-dd") & "\"
+ToFdr = Fs_ImpDoneFdr & SubFdr
+Pth_CrtIfNotExist ToFdr
+Fso.MoveFile FmFx, ToFdr    '<===
+Fn = Ffn_Fn(FmFx)
+Fdr = Ffn_Pth(FmFx)
+Msg "{Mass-Update-Xls-File} in {Fdr} is imported into database and moved to {Sub-Fdr}", Fn, Fdr, SubFdr
 End Sub
 
 Private Sub ZDoShellFb_ToGenCmpRpt()
@@ -143,7 +141,7 @@ Dim Where$
 
 Dim IsRec_Exist As Boolean
     Dim A$
-    A = Fmt("Select Count(*) from SkuCostEle where ?", Where)
+    A = Fmt_QQ("Select Count(*) from SkuCostEle where ?", Where)
     IsRec_Exist = RunSql_Val(Db, A) > 0
 
 Dim Sql$

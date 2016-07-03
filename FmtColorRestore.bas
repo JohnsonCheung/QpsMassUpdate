@@ -9,8 +9,8 @@ End Type
 Private A_Ws As Worksheet
 Private B As B
 
-Sub FmtColor_DoRestore(WrkWs As Worksheet)
-Set A_Ws = WrkWs
+Sub FmtColor_DoRestore(Ws As Worksheet)
+Set A_Ws = Ws
 
 Dim LastCno%
     LastCno = Ws_RC(A_Ws, 5, 1).End(xlToRight).Column
@@ -24,6 +24,7 @@ Const TotColColor = 13238235   ' LightGreen
 ZDo_Clear_Color
 ZDo_Set_OneColor ZFillerCnoAy, 10092543   ' LightYellow
 ZDo_Set_OneColor ZTotColCnoAy, 13238235   ' LightGreen
+Ws_SummaryCol(Ws) = xlSummaryOnLeft
 End Sub
 
 Private Sub ZDo_Clear_Color()

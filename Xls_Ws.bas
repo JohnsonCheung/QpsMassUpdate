@@ -167,6 +167,12 @@ Dim mRge As Range: Set mRge = Ws.Range(Ws.Cells(Rno1, 1), Ws.Cells(Rno2, 1))
 mRge.EntireRow.OutlineLevel = pLvl
 End Sub
 
+Property Let Ws_SummaryCol(Ws As Worksheet, SummaryCol As XlSummaryColumn)
+Ws.Activate
+Ws.Range("A1").Activate
+Ws.Outline.SummaryColumn = SummaryCol
+End Property
+
 Function Ws_R(Ws As Worksheet, R) As Range
 Set Ws_R = Ws.Rows(R)
 End Function

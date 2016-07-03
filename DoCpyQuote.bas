@@ -64,34 +64,28 @@ End Sub
 Property Get ZPjKey(Ay() As KeyDta) As PjKey()
 'Return uniq-PjKeyAy
 Dim A$()            ' PjKeyStr Ay
-    Dim J&
-    For J = 0 To UBound(Ay) - 1
-        
-        Dim Pj$, QDte As Date
-            Pj = Ay(J).Pj
-            QDte = Ay(J).QDte
-        
-        Dim PjKeyStr$
-            PjKeyStr = Join(Array(Pj, QDte), "|")
-            
-        Push_NoDup A, PjKeyStr
-    Next
-
+Dim J&
 Dim O() As PjKey
-    Dim U&
-    U = UB(A)
-    If U >= 0 Then
-        ReDim O(U)
-        For J = 0 To U
-            Dim B$()        ' Splitting B(0)=Pj | B(1)=QDte
-                B = Split(A(J), "|")
-            
-            Dim M As PjKey
-                M.Pj = B(0)
-                M.QDte = B(1)
-            O(J) = M
-        Next
-    End If
+Dim PjKeyStr$
+Dim Pj$, QDte As Date
+Dim U&
+Dim B$()
+Dim M As PjKey
+For J = 0 To UBound(Ay)
+    Pj = Ay(J).Pj
+    QDte = Ay(J).QDte
+    PjKeyStr = Pj & "|" & QDte
+    Push_NoDup A, PjKeyStr  '<===
+Next
+
+U = UB(A)
+ReDim O(U)
+For J = 0 To U
+    B = Split(A(J), "|") ' Splitting B(0)=Pj | B(1)=QDte
+    M.Pj = B(0)
+    M.QDte = B(1)
+    O(J) = M    '<===
+Next
 ZPjKey = O
 End Property
 
@@ -123,7 +117,6 @@ For J = 0 To UBound(PjKey)
     With PjKey(J)
         B = .Pj & "|" & .QDte
     End With
-    If J = 21 Then Stop
     If Ay_Has(A, B) Then Stop
     A(J) = B
 Next

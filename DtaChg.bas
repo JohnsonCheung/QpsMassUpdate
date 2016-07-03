@@ -1,7 +1,5 @@
 Attribute VB_Name = "DtaChg"
 Option Explicit
-
-
 Enum eFld     ' At Ro5
     eSupplier = 1
     eBrand = 2
@@ -64,7 +62,6 @@ End Enum
 Dim O() As TDtaChg
 Dim WrkCno As TCno
 Dim OrgCno As TCno
-Dim R&
 Dim WrkSqv, OrgSqv
 Dim WrkKey() As KeyDta
 
@@ -129,6 +126,14 @@ Enm_FldTy_ToStr = O
 End Function
 
 Function TDtaChg(Src As TSrc) As TDtaChg()
+Dim W1 As PjQCno
+Dim O1 As PjQCno
+Dim W2 As SkuCno
+Dim O2 As SkuCno
+Dim W3 As OneCno
+Dim O3 As OneCno
+Dim T As eFldTy
+Dim R&
 Erase O
 WrkKey = Src.Wrk.KeyDta
 WrkSqv = Src.Wrk.Sqv
@@ -139,66 +144,60 @@ OrgCno = Src.Org.Cno
 Z_Chr
 Z_Cst
 Z_CstRmk
-Dim W1 As PjQCno
-Dim O1 As PjQCno
-Dim W2 As SkuCno
-Dim O2 As SkuCno
-Dim W3 As OneCno
-Dim O3 As OneCno
-    W1 = WrkCno.PjQ
-    O1 = WrkCno.PjQ
-    W2 = WrkCno.Sku
-    O2 = WrkCno.Sku
-    W3 = WrkCno.One
-    O3 = OrgCno.One
-Dim T As eFldTy
-    T = eFldTy.eSku
+W1 = WrkCno.PjQ
+O1 = WrkCno.PjQ
+W2 = WrkCno.Sku
+O2 = WrkCno.Sku
+W3 = WrkCno.One
+O3 = OrgCno.One
+T = eFldTy.eSku
 For R = 1 To Src.Wrk.UR
-    ZOneCell eOpt, ePjQ, "RateCHF", W1.RateCHF, O1.RateCHF
-    ZOneCell eOpt, ePjQ, "RateUSD", W1.RateUSD, O1.RateJPY
-    ZOneCell eOpt, ePjQ, "RateJPY", W1.RateJPY, O1.RateJPY
-    ZOneCell eOpt, T, "AssWatchHKD", O2.AssWatchHKD, W2.AssWatchHKD
-    ZOneCell eOpt, T, "AssWatchUSD", O2.AssWatchUSD, W2.AssWatchHKD
-    ZOneCell eOpt, T, "SalesmanHKD", O2.SalesmanHKD, W2.SalesmanHKD
-    ZOneCell eOpt, T, "SalesmanUSD", O2.SalesmanUSD, W2.SalesmanUSD
-    ZOneCell eOpt, T, "CompleteWatchHKD", O2.CompleteWatchHKD, W2.CompleteWatchHKD
-    ZOneCell eOpt, T, "CompleteWatchUSD", O2.CompleteWatchUSD, W2.CompleteWatchUSD
-    ZOneCell eMust, T, "Cost", O2.Cost, W2.Cost
-    ZOneCell eMust, T, "PotentialQty", O2.PotentialQty, W2.PotentialQty
-    ZOneCell eOpt, eOne, "ProtCst", O3.ProtCst, W3.ProtCst
-    ZOneCell eOpt, eOne, "ProtRmk", O3.ProtRmk, W3.ProtRmk
-    ZOneCell eOpt, eOne, "ToolCst", O3.ToolCst, W3.ToolCst
-    ZOneCell eOpt, eOne, "ToolRmk", O3.ToolRmk, W3.ToolRmk
+    ZOneCell R, eOpt, ePjQ, "RateCHF", W1.RateCHF, O1.RateCHF
+    ZOneCell R, eOpt, ePjQ, "RateUSD", W1.RateUSD, O1.RateUSD
+    ZOneCell R, eOpt, ePjQ, "RateJPY", W1.RateJPY, O1.RateJPY
+    ZOneCell R, eOpt, T, "AssWatchHKD", O2.AssWatchHKD, W2.AssWatchHKD
+    ZOneCell R, eOpt, T, "AssWatchUSD", O2.AssWatchUSD, W2.AssWatchUSD
+    ZOneCell R, eOpt, T, "SalesmanHKD", O2.SalesmanHKD, W2.SalesmanHKD
+    ZOneCell R, eOpt, T, "SalesmanUSD", O2.SalesmanUSD, W2.SalesmanUSD
+    ZOneCell R, eOpt, T, "CompleteWatchHKD", O2.CompleteWatchHKD, W2.CompleteWatchHKD
+    ZOneCell R, eOpt, T, "CompleteWatchUSD", O2.CompleteWatchUSD, W2.CompleteWatchUSD
+    ZOneCell R, eMust, T, "Cost", O2.Cost, W2.Cost
+    ZOneCell R, eMust, T, "PotentialQty", O2.PotentialQty, W2.PotentialQty
+    ZOneCell R, eOpt, eOne, "ProtCst", O3.ProtCst, W3.ProtCst
+    ZOneCell R, eOpt, eOne, "ProtRmk", O3.ProtRmk, W3.ProtRmk
+    ZOneCell R, eOpt, eOne, "ToolCst", O3.ToolCst, W3.ToolCst
+    ZOneCell R, eOpt, eOne, "ToolRmk", O3.ToolRmk, W3.ToolRmk
 Next
 TDtaChg = O
 End Function
 
-Private Sub ZOneCell(Opt As eOptional, FldTy As eFldTy, FldNm$, OrgCno%, WrkCno%, Optional CostGp$, Optional CostEle$, Optional ChrNm$, Optional ChrCd$)
+Private Sub ZOneCell(R&, Opt As eOptional, FldTy As eFldTy, FldNm$, OrgCno%, WrkCno%, Optional CostGp$, Optional CostEle$, Optional ChrNm$, Optional ChrCd$)
+Dim WrkVal, OrgVal
+Dim Key As KeyDta
+Dim M As TDtaChg
+Dim N&
+
 If Opt = eOpt Then
     If WrkCno = 0 Then Exit Sub
 End If
-Dim WrkVal, OrgVal
-    WrkVal = WrkSqv(R, WrkCno)
-    If OrgCno > 0 Then
-        OrgVal = OrgSqv(R, OrgCno)
-    End If
+WrkVal = WrkSqv(R, WrkCno)
+If OrgCno > 0 Then
+    OrgVal = OrgSqv(R, OrgCno)
+End If
 If WrkVal <> OrgVal Then
-    Dim Key As KeyDta
-        Key = WrkKey(R)
-    Dim M As TDtaChg
-        With M
-            .Cno = WrkCno
-            .CharName = ChrNm
-            .CharCode = ChrCd
-            .CostGp = CostGp
-            .CostEle = CostEle
-            .FldNm = FldNm
-            .FldTy = FldTy
-            .WrkVal = WrkVal
-            .OrgVal = OrgVal
-            .Key = Key
-        End With
-    Dim N&
+    Key = WrkKey(R)
+    With M
+        .Cno = WrkCno
+        .CharName = ChrNm
+        .CharCode = ChrCd
+        .CostGp = CostGp
+        .CostEle = CostEle
+        .FldNm = FldNm
+        .FldTy = FldTy
+        .WrkVal = WrkVal
+        .OrgVal = OrgVal
+        .Key = Key
+    End With
     N = ZSz
     ReDim Preserve O(N)
     O(N) = M
@@ -213,32 +212,34 @@ End Function
 Private Sub Z_Chr()
 Dim WAy() As ChrCno
 Dim OAy() As ChrCno
-    OAy = OrgCno.Chr
-    WAy = WrkCno.Chr
 Dim J%
+Dim W As ChrCno
+Dim O As ChrCno
+Dim Fnd As Boolean
+Dim I%
+Dim R&
+
+OAy = OrgCno.Chr
+WAy = WrkCno.Chr
 For J = 0 To UBound(WAy)
-    Dim W As ChrCno
-        W = WAy(J)
-    Dim O As ChrCno
-    Dim Fnd As Boolean
-        Fnd = False
-        Dim I%
-        For I = 0 To UBound(OAy)
-            O = OAy(I)
-            If O.CostGp = W.CostGp Then
-            If O.CostEle = W.CostEle Then
-            If O.CharName = W.CharName Then
-            If O.CharCode = W.CharCode Then
-                Fnd = True
-                Exit For
-            End If
-            End If
-            End If
-            End If
-        Next
+    W = WAy(J)
+    Fnd = False
+    For I = 0 To UBound(OAy)
+        O = OAy(I)
+        If O.CostGp = W.CostGp Then
+        If O.CostEle = W.CostEle Then
+        If O.CharName = W.CharName Then
+        If O.CharCode = W.CharCode Then
+            Fnd = True
+            Exit For
+        End If
+        End If
+        End If
+        End If
+    Next
     If Fnd Then
         For R = 1 To UBound(WrkSqv, 1)
-            ZOneCell eOpt, eFldTy.eChr, "Char", O.Cno, W.Cno, W.CostGp, W.CostEle, W.CharName, W.CharCode
+            ZOneCell R, eOpt, eFldTy.eChr, "Char", O.Cno, W.Cno, W.CostGp, W.CostEle, W.CharName, W.CharCode
         Next
     End If
 Next
@@ -247,28 +248,29 @@ End Sub
 Private Sub Z_Cst()
 Dim OAy() As CstValCno
 Dim WAy() As CstValCno
-    OAy = WrkCno.CstVal
-    WAy = WrkCno.CstVal
 Dim J%
+Dim W As CstValCno
+Dim O As CstValCno
+Dim Fnd As Boolean
+Dim I%
+Dim R&
+OAy = WrkCno.CstVal
+WAy = WrkCno.CstVal
 For J = 0 To UBound(WAy)
-    Dim W As CstValCno
-        W = WAy(J)
-    Dim O As CstValCno
-    Dim Fnd As Boolean
-        Fnd = False
-        Dim I%
-        For I = 0 To UBound(OAy)
-            O = OAy(I)
-            If O.CostGp = W.CostGp Then
-                If O.CostEle = W.CostEle Then
-                    Fnd = True
-                    Exit For
-                End If
+    W = WAy(J)
+    Fnd = False
+    For I = 0 To UBound(OAy)
+        O = OAy(I)
+        If O.CostGp = W.CostGp Then
+            If O.CostEle = W.CostEle Then
+                Fnd = True
+                Exit For
             End If
-        Next
+        End If
+    Next
     If Fnd Then
         For R = 1 To UBound(WrkSqv, 1)
-            ZOneCell eOpt, eFldTy.eCstVal, "Cost", O.Cno, W.Cno, W.CostGp, W.CostEle
+            ZOneCell R, eOpt, eFldTy.eCstVal, "Cost", O.Cno, W.Cno, W.CostGp, W.CostEle
         Next
     End If
 Next
@@ -277,28 +279,29 @@ End Sub
 Private Sub Z_CstRmk()
 Dim WAy() As CstRmkCno
 Dim OAy() As CstRmkCno
-    WAy = WrkCno.CstRmk
-    OAy = OrgCno.CstRmk
 Dim J%
+Dim W As CstRmkCno
+Dim O As CstRmkCno
+Dim Fnd As Boolean
+Dim I%
+Dim R&
+WAy = WrkCno.CstRmk
+OAy = OrgCno.CstRmk
 For J = 0 To UBound(WAy)
-    Dim W As CstRmkCno
-        W = WAy(J)
-    Dim O As CstRmkCno
-    Dim Fnd As Boolean
-        Fnd = False
-        Dim I%
-        For I = 0 To UBound(OAy)
-            O = OAy(I)
-            If W.CostEle = O.CostEle Then
-            If W.CostGp = O.CostGp Then
-                Fnd = True
-                Exit For
-            End If
-            End If
-        Next
+    W = WAy(J)
+    Fnd = False
+    For I = 0 To UBound(OAy)
+        O = OAy(I)
+        If W.CostEle = O.CostEle Then
+        If W.CostGp = O.CostGp Then
+            Fnd = True
+            Exit For
+        End If
+        End If
+    Next
     If Fnd Then
         For R = 1 To UBound(WrkSqv, 1)
-            ZOneCell eOpt, eCstRmk, "Cost Rmk", O.Cno, W.Cno, W.CostGp, W.CostEle
+            ZOneCell R, eOpt, eCstRmk, "Cost Rmk", O.Cno, W.Cno, W.CostGp, W.CostEle     '<===
         Next
     End If
 Next

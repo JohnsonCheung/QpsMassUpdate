@@ -107,6 +107,44 @@ Else
 End If
 End Function
 
+Function Ay_MaxLen&(Ay)
+Dim O&
+Dim J&
+For J = 0 To UB(Ay)
+    If Len(Ay(J)) > O Then O = Len(Ay(J))
+Next
+Ay_MaxLen = O
+End Function
+
+Function Ay_Minus(Ay, ParamArray Ap())
+Dim Av()
+    Av = Ap
+Dim J%
+Dim O
+    O = Ay
+    For J = 0 To UB(Av)
+        O = Ay_MinusOne(O, Av(J))
+    Next
+Ay_Minus = O
+End Function
+
+Function Ay_MinusOne(Ay, Ay1)
+If Sz(Ay1) = 0 Then
+    Ay_MinusOne = Ay
+    Exit Function
+End If
+Dim O
+O = Ay
+Erase O
+Dim J%
+For J = 0 To UB(Ay)
+    If Not Ay_Has(Ay1, Ay(J)) Then
+        Push O, Ay(J)
+    End If
+Next
+Ay_MinusOne = O
+End Function
+
 Function Ay_Quote(Ay, Q$) As String()
 Dim O$(), U&
 U = UB(Ay)
